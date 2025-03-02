@@ -9,7 +9,7 @@
   position: relative;
   width: 100vw;
   height: 100vh;
-  background-image: url('/devil-s-kitchen-site/assets/Background.png');
+  background-image: url('../assets/Background.png');
   background-size: cover;
   background-position: center;
   overflow: hidden;
