@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Platformer with Image Placeholders</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
     * {
+      font-family: 'Press Start 2P', monospace;
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
     .game-container {
       position: relative;
       width: 100vw;
@@ -20,7 +21,6 @@
       background-position: center;
       overflow: hidden;
     }
-    
     .platform {
       position: absolute;
       background-image: url('assets/platform.png');
@@ -29,34 +29,25 @@
       background-repeat: no-repeat;
       background-position: center;
       background-color: transparent;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-    outline: none;
+      cursor: pointer;
+      overflow: hidden;
+      outline: none;
     }
-    
     .platform.main {
       width: 300px;
       height: 80px;
-    }
-    
-    .platform.left1 { bottom: 100px; left: 5%; width: 150px; height: 40px; }
-    .platform.left2 { bottom: 170px; left: 18%; width: 150px; height: 40px; }
-    .platform.left3 { bottom: 240px; left: 28%; width: 150px; height: 40px; }
-    .platform.left4 { bottom: 120px; left: 38%; width: 150px; height: 40px; }
-    
-    .platform.main {
       bottom: 400px;
       left: 50%;
       transform: translateX(-50%);
     }
-    
+    .platform.left1 { bottom: 100px; left: 5%; width: 150px; height: 40px; }
+    .platform.left2 { bottom: 170px; left: 18%; width: 150px; height: 40px; }
+    .platform.left3 { bottom: 240px; left: 28%; width: 150px; height: 40px; }
+    .platform.left4 { bottom: 120px; left: 38%; width: 150px; height: 40px; }
     .platform.right1 { bottom: 400px; left: 62%; width: 150px; height: 40px; }
     .platform.right2 { bottom: 360px; left: 72%; width: 150px; height: 40px; }
     .platform.right3 { bottom: 310px; left: 82%; width: 150px; height: 40px; }
     .platform.right4 { bottom: 260px; left: 90%; width: 150px; height: 40px; }
-    
     .protagonist {
       position: absolute;
       width: 60px;
@@ -65,19 +56,200 @@
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center bottom;
-      bottom: 460px;
-      left: calc(50% - 20px);
       z-index: 100;
     }
-    
     .jumping {
       background-image: url('assets/jump.png');
       height: 120px;
       width: 120px;
     }
-    
     .flip {
       transform: scaleX(-1);
+    }
+    .form-section {
+      width: 100vw;
+      height: 100vh;
+      background-color: rgb(147, 227, 228);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .form-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 400px;
+    }
+    .wrapper {
+      --input-focus: #e9f500;
+      --font-color: #323232;
+      --font-color-sub: #000000;
+      --bg-color: #faf202;
+      --bg-color-alt: #00ffee;
+      --main-color: #ffee00;
+    }
+    .switch {
+      transform: translateY(-200px);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      width: 50px;
+      height: 20px;
+    }
+    .card-side::before {
+      position: absolute;
+      content: 'Log in';
+      left: -70px;
+      top: 0;
+      width: 100px;
+      text-decoration: underline;
+      color: var(--font-color);
+      font-weight: 600;
+    }
+    .card-side::after {
+      position: absolute;
+      content: 'Sign up';
+      left: 70px;
+      top: 0;
+      width: 100px;
+      text-decoration: none;
+      color: var(--font-color);
+      font-weight: 600;
+    }
+    .toggle {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      box-sizing: border-box;
+      border-radius: 5px;
+      border: 2px solid var(--main-color);
+      box-shadow: 4px 4px var(--main-color);
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--bg-colorcolor);
+      transition: 0.3s;
+    }
+    .slider:before {
+      box-sizing: border-box;
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      border: 2px solid var(--main-color);
+      border-radius: 5px;
+      left: -2px;
+      bottom: 2px;
+      background-color: var(--bg-color);
+      box-shadow: 0 3px 0 var(--main-color);
+      transition: 0.3s;
+    }
+    .toggle:checked + .slider {
+      background-color: var(--input-focus);
+    }
+    .toggle:checked + .slider:before {
+      transform: translateX(30px);
+    }
+    .toggle:checked ~ .card-side:before {
+      text-decoration: none;
+    }
+    .toggle:checked ~ .card-side:after {
+      text-decoration: underline;
+    }
+    .flip-card__inner {
+      width: 300px;
+      height: 350px;
+      position: relative;
+      background-color: transparent;
+      perspective: 1000px;
+      text-align: center;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+    .toggle:checked ~ .flip-card__inner {
+      transform: rotateY(180deg);
+    }
+    .toggle:checked ~ .flip-card__front {
+      box-shadow: none;
+    }
+    .flip-card__front, .flip-card__back {
+      padding: 20px;
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      background: rgb(0, 255, 238);
+      gap: 20px;
+      border-radius: 5px;
+      border: 2px solid var(--main-color);
+      box-shadow: 4px 4px var(--main-color);
+    }
+    .flip-card__back {
+      width: 100%;
+      transform: rotateY(180deg);
+    }
+    .flip-card__form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .title {
+      margin: 20px 0 20px 0;
+      font-size: 25px;
+      font-weight: 900;
+      text-align: center;
+      color: var(--main-color);
+    }
+    .flip-card__input {
+      width: 250px;
+      height: 40px;
+      border-radius: 5px;
+      border: 2px solid var(--main-color);
+      background-color: var(--bg-color);
+      box-shadow: 4px 4px var(--main-color);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--font-color);
+      padding: 5px 10px;
+      outline: none;
+    }
+    .flip-card__input::placeholder {
+      color: var(--font-color-sub);
+      opacity: 0.8;
+    }
+    .flip-card__input:focus {
+      border: 2px solid var(--input-focus);
+    }
+    .flip-card__btn:active, .button-confirm:active {
+      box-shadow: 0px 0px var(--main-color);
+      transform: translate(3px, 3px);
+    }
+    .flip-card__btn {
+      margin: 20px 0 20px 0;
+      width: 120px;
+      height: 40px;
+      border-radius: 5px;
+      border: 2px solid var(--main-color);
+      background-color: var(--bg-color);
+      box-shadow: 4px 4px var(--main-color);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--font-color);
+      cursor: pointer;
     }
   </style>
 </head>
@@ -86,26 +258,58 @@
     <button class="platform left1"></button>
     <button class="platform left2"></button>
     <button class="platform left3"></button>
-    
     <button class="platform main"></button>
-    
     <button class="platform right1"></button>
     <button class="platform right2"></button>
     <button class="platform right3"></button>
     <button class="platform right4"></button>
-    
     <div class="protagonist" id="protagonist"></div>
   </div>
-  
+  <section class="form-section">
+    <div class="form-container">
+      <div class="wrapper">
+        <div class="card-switch">
+          <label class="switch">
+            <input type="checkbox" class="toggle">
+            <span class="slider"></span>
+            <span class="card-side"></span>
+            <div class="flip-card__inner">
+              <div class="flip-card__front">
+                <div class="title" style="color: black;">Log in</div>
+                <form class="flip-card__form" action="">
+                  <input class="flip-card__input" name="email" placeholder="Email" type="email">
+                  <input class="flip-card__input" name="password" placeholder="Password" type="password">
+                  <button class="flip-card__btn">Let`s go!</button>
+                </form>
+              </div>
+              <div class="flip-card__back">
+                <div class="title">Sign up</div>
+                <form class="flip-card__form" action="">
+                  <input class="flip-card__input" placeholder="Name" type="name">
+                  <input class="flip-card__input" name="email" placeholder="Email" type="email">
+                  <input class="flip-card__input" name="password" placeholder="Password" type="password">
+                  <button class="flip-card__btn">Confirm!</button>
+                </form>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </section>
   <script>
     const platforms = document.querySelectorAll('.platform');
     const protagonist = document.getElementById('protagonist');
     let isJumping = false;
-    
     window.addEventListener('load', () => {
       const protag = document.getElementById('protagonist');
       const img = new Image();
       img.src = 'assets/idle.png';
+      const left1 = document.querySelector('.platform.left1');
+      const containerRect = document.querySelector('.game-container').getBoundingClientRect();
+      const rect = left1.getBoundingClientRect();
+      protag.style.left = (rect.left - containerRect.left + (rect.width - protag.offsetWidth) / 2) + 'px';
+      protag.style.bottom = (containerRect.bottom - rect.top + 5) + 'px';
       img.onerror = () => {
         document.querySelectorAll('.platform').forEach(p => {
           p.style.backgroundColor = '#555';
@@ -118,59 +322,72 @@
         document.querySelector('.game-container').style.backgroundImage = 'none';
       };
     });
-
+    function animateToTarget(startX, startY, targetX, targetY, duration) {
+      const startTime = performance.now();
+      function animate(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const currentX = startX + (targetX - startX) * progress;
+        const currentY = startY + (targetY - startY) * progress;
+        protagonist.style.left = currentX + 'px';
+        protagonist.style.top = currentY + 'px';
+        if (progress < 1) requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+    }
     platforms.forEach(platform => {
       platform.addEventListener('click', (event) => {
         if (isJumping) return;
-        
         const rect = event.target.getBoundingClientRect();
         const containerRect = document.querySelector('.game-container').getBoundingClientRect();
-        
         const currentLeft = protagonist.offsetLeft;
         const currentBottom = parseFloat(getComputedStyle(protagonist).bottom);
-        
         const newLeft = rect.left - containerRect.left + (rect.width / 2) - (protagonist.offsetWidth / 2);
-        const newBottom = containerRect.bottom - rect.top + 5; // Place player on TOP of the button
-
+        const newBottom = containerRect.bottom - rect.top + 5;
         isJumping = true;
         protagonist.classList.add('jumping');
-
-        // Flip character in correct direction
         if (newLeft < currentLeft) {
           protagonist.classList.add('flip');
         } else {
           protagonist.classList.remove('flip');
         }
-
         const distance = Math.abs(newLeft - currentLeft);
         const jumpHeight = Math.min(120, 60 + distance * 0.2);
-
         const jumpDuration = 800;
         const startTime = performance.now();
-
         function animateJump(currentTime) {
           const elapsedTime = currentTime - startTime;
           const progress = Math.min(elapsedTime / jumpDuration, 1);
-
-          // Smooth jump arc
           const verticalOffset = 4 * jumpHeight * progress * (1 - progress);
-
-          // Smooth horizontal movement
           const horizontalPos = currentLeft + (newLeft - currentLeft) * progress;
           const bottomPos = currentBottom + (newBottom - currentBottom) * progress;
-
-          protagonist.style.left = `${horizontalPos}px`;
-          protagonist.style.bottom = `${bottomPos + verticalOffset}px`;
-
+          protagonist.style.left = horizontalPos + 'px';
+          protagonist.style.bottom = (bottomPos + verticalOffset) + 'px';
           if (progress < 1) {
             requestAnimationFrame(animateJump);
           } else {
-            protagonist.style.bottom = `${newBottom}px`;
+            protagonist.style.bottom = newBottom + 'px';
             protagonist.classList.remove('jumping');
             isJumping = false;
+            if (event.target.classList.contains('right4')) {
+              setTimeout(() => {
+                document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                  const signup = document.querySelector('.flip-card__back');
+                  const signupRect = signup.getBoundingClientRect();
+                  const currentRect = protagonist.getBoundingClientRect();
+                  document.body.appendChild(protagonist);
+                  protagonist.style.position = 'fixed';
+                  protagonist.style.left = currentRect.left + 'px';
+                  protagonist.style.top = currentRect.top + 'px';
+                  const targetX = signupRect.left + (signupRect.width - protagonist.offsetWidth) / 2;
+                  const targetY = signupRect.top;
+                  animateToTarget(currentRect.left, currentRect.top, targetX, targetY, 800);
+                }, 1000);
+              }, 2000);
+            }
           }
         }
-
         requestAnimationFrame(animateJump);
       });
     });
