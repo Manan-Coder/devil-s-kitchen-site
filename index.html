@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Devils Kitchen</title>
+  <title>Devil's Kitchen</title>
   <style>
 
     * {
@@ -11,86 +11,76 @@
       margin: 0;
       padding: 0;
     }
+    
 
     .game-container {
       position: relative;
       width: 100vw;
       height: 100vh;
-      background: #e0e0e0;
+      background-image: url('assets/Background.png'); 
+      background-size: cover;
+      background-position: center;
       overflow: hidden;
     }
-
+    
+  
     .platform {
       position: absolute;
-      background: #555;
-      color: #fff;
+      width: 120px;
+      height: 30px;
+      background-image: url('assets/platform.png'); 
+      background-size: cover;
       border: none;
-      border-radius: 4px;
       cursor: pointer;
-      padding: 5px;
-      font-size: 0.9rem;
+
+      color: #fff;
+      text-align: center;
+      line-height: 30px;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px #000;
     }
     
 
-    .platform.left1 { bottom: 100px; left: 5%; width: 120px; }
-    .platform.left2 { bottom: 170px; left: 18%; width: 120px; }
-    .platform.left3 { bottom: 240px; left: 28%; width: 120px; }
-    .platform.left4 { bottom: 320px; left: 38%; width: 120px; }
+    .platform.main {
+      width: 300px;
+      height: 40px;
+    }
+    
 
+    .platform.left1 { bottom: 100px; left: 5%; }
+    .platform.left2 { bottom: 170px; left: 18%; }
+    .platform.left3 { bottom: 240px; left: 28%; }
+    .platform.left4 { bottom: 320px; left: 38%; }
+    
     .platform.main {
       bottom: 400px;
       left: 50%;
       transform: translateX(-50%);
-      width: 300px;
-      height: 40px;
-      font-size: 1.2rem;
-    }
-
-    .platform.right1 { bottom: 400px; left: 62%; width: 120px; }
-    .platform.right2 { bottom: 360px; left: 72%; width: 120px; }
-    .platform.right3 { bottom: 310px; left: 82%; width: 120px; }
-    .platform.right4 { bottom: 260px; left: 90%; width: 120px; }
-
-    .protagonist {
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      background-image: url("assets/player.png");
-
-      background-size: 48px 48px;
-
-      background-position: -48px 0;
-      border-radius: 50%;
-      bottom: 410px;
-      left: calc(50% - 15px);
-      transition: left 0.3s ease, bottom 0.3s ease;
-
-      animation: idleAnim 1.2s steps(6) infinite;
-    }
-
-    @keyframes idleAnim {
-      0%   { background-position: -48px 0; }
-      16.67% { background-position: -96px 0; }
-      33.33% { background-position: -144px 0; }
-      50%  { background-position: -192px 0; }
-      66.67% { background-position: -240px 0; }
-      83.33% { background-position: -288px 0; }
-      100% { background-position: -48px 0; }
-    }
-
-    @keyframes jumpAnim {
-      0%   { transform: translateY(0); background-position: -240px 0; }
-      16.67% { transform: translateY(-10px); background-position: -288px 0; }
-      33.33% { transform: translateY(-30px); background-position: -336px 0; }
-      50%  { transform: translateY(-50px); background-position: -384px 0; }
-      66.67% { transform: translateY(-30px); background-position: -432px 0; }
-      83.33% { transform: translateY(-10px); background-position: -480px 0; }
-      100% { transform: translateY(0); background-position: -240px 0; }
     }
     
+    .platform.right1 { bottom: 400px; left: 62%; }
+    .platform.right2 { bottom: 360px; left: 72%; }
+    .platform.right3 { bottom: 310px; left: 82%; }
+    .platform.right4 { bottom: 260px; left: 90%; }
+    
+  
+    .protagonist {
+      position: absolute;
+      width: 40px;
+      height: 50px;
+      background-image: url('assets/idle.png'); 
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center bottom;
+      bottom: 430px; 
+      left: calc(50% - 20px);
 
-    .jump {
-      animation: jumpAnim 1.2s steps(6) ease-out;
+      transition: left 0.3s ease;
+      z-index: 100;
+    }
+    
+    .jumping {
+      background-image: url('assets/idle.png');
     }
   </style>
 </head>
@@ -101,6 +91,7 @@
     <button class="platform left2">P2</button>
     <button class="platform left3">P3</button>
     <button class="platform left4">P4</button>
+    
 
     <button class="platform main">My Platformer</button>
     
@@ -117,30 +108,86 @@
 
     const platforms = document.querySelectorAll('.platform');
     const protagonist = document.getElementById('protagonist');
+    let isJumping = false;
+    
+
+    window.addEventListener('load', () => {
+
+      const protag = document.getElementById('protagonist');
+      const img = new Image();
+      img.src = 'assets/idle.png';
+      img.onerror = () => {
+        console.log("Error loading images, using fallback colors");
+        document.querySelectorAll('.platform').forEach(p => {
+          p.style.backgroundColor = '#555';
+          p.style.backgroundImage = 'none';
+        });
+        protag.style.backgroundColor = '#ff5722';
+        protag.style.backgroundImage = 'none';
+        protag.style.borderRadius = '50%';
+        document.querySelector('.game-container').style.backgroundColor = '#e0e0e0';
+        document.querySelector('.game-container').style.backgroundImage = 'none';
+      };
+    });
+    
 
     platforms.forEach(platform => {
       platform.addEventListener('click', (event) => {
+  
+        if (isJumping) return;
+        
 
         const rect = event.target.getBoundingClientRect();
         const containerRect = document.querySelector('.game-container').getBoundingClientRect();
+
+        const currentLeft = protagonist.offsetLeft;
+        const currentBottom = parseFloat(getComputedStyle(protagonist).bottom);
+        
+
         const newLeft = rect.left - containerRect.left + (rect.width / 2) - (protagonist.offsetWidth / 2);
         const newBottom = containerRect.bottom - rect.top + 10;
+        
 
+        isJumping = true;
+        
+
+        protagonist.classList.add('jumping');
+        
 
         protagonist.style.left = `${newLeft}px`;
-        protagonist.style.bottom = `${newBottom}px`;
+        
+     
+        const distance = Math.abs(newLeft - currentLeft);
+        const jumpHeight = Math.min(120, 60 + distance * 0.2);
+
+        const jumpDuration = 800; 
+        const startTime = performance.now();
+        
+        function animateJump(currentTime) {
+          const elapsedTime = currentTime - startTime;
+          const progress = Math.min(elapsedTime / jumpDuration, 1);
+          
+          if (progress < 1) {
 
 
-        protagonist.classList.remove('jump');
-        void protagonist.offsetWidth; 
-        protagonist.classList.add('jump');
+            const verticalOffset = 4 * jumpHeight * progress * (1 - progress);
+            
+   
+            const bottomPos = currentBottom + (newBottom - currentBottom) * progress;
+
+            protagonist.style.bottom = `${bottomPos + verticalOffset}px`;
+
+            requestAnimationFrame(animateJump);
+          } else {
+
+            protagonist.style.bottom = `${newBottom}px`;
+            protagonist.classList.remove('jumping');
+            isJumping = false;
+          }
+        }
+        
+        requestAnimationFrame(animateJump);
       });
-    });
-
-    protagonist.addEventListener('animationend', (e) => {
-      if (e.animationName === 'jumpAnim') {
-        protagonist.classList.remove('jump');
-      }
     });
   </script>
 </body>
