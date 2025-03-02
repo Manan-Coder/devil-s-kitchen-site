@@ -9,14 +9,14 @@
   position: relative;
   width: 100vw;
   height: 100vh;
-  background-image: url('devil-s-kitchen-site/assets/Background.png');
+  background-image: url('/devil-s-kitchen-site/assets/Background.png');
   background-size: cover;
   background-position: center;
   overflow: hidden;
 }
 .platform {
   position: absolute;
-  background-image: url('devil-s-kitchen-site/assets/platform.png');
+  background-image: url('/devil-s-kitchen-site/assets/platform.png');
   background-size: contain;
   border: none;
   background-repeat: no-repeat;
@@ -45,14 +45,14 @@
   position: absolute;
   width: 60px;
   height: 60px;
-  background-image: url('devil-s-kitchen-site/assets/idle.png');
+  background-image: url('/devil-s-kitchen-site/assets/idle.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center bottom;
   z-index: 100;
 }
 .jumping {
-  background-image: url('devil-s-kitchen-site/assets/jump.png');
+  background-image: url('/devil-s-kitchen-site/assets/jump.png');
   height: 120px;
   width: 120px;
 }
