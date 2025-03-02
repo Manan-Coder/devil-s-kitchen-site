@@ -52,7 +52,7 @@
   z-index: 100;
 }
 .jumping {
-  background-image: url('devil-s-kitchen-site/assets/jump.png');
+  background-image: url('/assets/jump.png');
   height: 120px;
   width: 120px;
 }
