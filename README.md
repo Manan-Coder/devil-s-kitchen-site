@@ -1,1 +1,3 @@
-Hey!
+Hey! This is a website for one of my game Devil's Kitchen.
+I'll add a link to download it once it is done......
+enjoy :)
