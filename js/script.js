@@ -91,3 +91,27 @@ platforms.forEach(platform => {
     requestAnimationFrame(animateJump);
   });
 });
+
+async function getSignupOTP(){
+  const email = document.getElementById('email').value
+  const name = document.getElementById('name').value
+  console.log(name,email)
+  data = {name,email}
+  try{
+    const response = await fetch('http://127.0.0.1:5000/send-signup-otp',{
+      method : "POST",
+      headers : {
+        "Content-type" : "application/json"
+      },
+      body : JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    console.log(result)
+    return result
+  }
+catch(error){
+  console.error(error)
+  return null;
+}
+}

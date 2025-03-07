@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
-
+from flask_cors import CORS
 app = Flask(__name__)
-
+CORS(app)
 @app.route("/send-signup-otp", methods = ['POST']) #make request to this endpoint to send otp mails for signup
 def send_mail_signup_otp():
     data = request.get_json()
@@ -15,11 +15,11 @@ def send_mail_signup_otp():
 
     otp = random.randint(1000,9999)
 
-    smtp_server = 'email'
+    smtp_server = 'smtp.gmail.com'
     smtp_port = 587
-    email_from = 'sharmamanan1908@gmail.com'
+    email_from = 'your email'
     email_to = email
-    email_password = "app password"
+    email_password = "your app specific email password"
     msg = MIMEText(f'''Hey {name}! Thanks for signing up for Devil's Kitchen.
 Here's your OTP to verify your email - {otp}
 enjoy :D''')
