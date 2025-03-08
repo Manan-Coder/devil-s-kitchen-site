@@ -1,4 +1,5 @@
 let sentOtp = null;
+let sessionCode = null;
 const platforms = document.querySelectorAll('.platform');
 const protagonist = document.getElementById('protagonist');
 let isJumping = false;
@@ -144,6 +145,7 @@ function checkOTP(){
   {
     document.getElementById('otp-error').style.color = 'green';
     document.getElementById('otp-error').innerHTML = 'Success!';
+    registerUser();
     setTimeout(() => {
       const overlay = document.getElementById('otp-overlay');
       if (overlay) {
@@ -174,6 +176,7 @@ async function getSignupOTP(){
     const result = await response.json();
     console.log(result)
     sentOtp = result["otp"]
+    sessionCode = result["sessionCode"]
     console.log(sentOtp)
     console.log(typeof(sentOtp))
     createOTPPopup();
@@ -183,6 +186,31 @@ catch(error){
   console.error(error)
   return null;
 }
+}
+
+async function registerUser(){
+  const email = document.getElementById('email').value
+  const name = document.getElementById('name').value
+  const password = document.getElementById('passw').value
+  console.log(sessionCode)
+  data = {name,email,password,sessionCode}
+  try{
+    const response = await fetch('http://127.0.0.1:5000/register-user',{
+        method : 'POST',
+        headers : {
+          "Content-type" : "application/json"
+        },
+        body : JSON.stringify(data)
+    });
+    const result = await response.json();
+    console.log(result);
+    return result
+  }
+  catch(error){
+    console.log(error);
+    return null;
+
+  }
 }
 
 
