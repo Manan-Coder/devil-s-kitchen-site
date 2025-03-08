@@ -1,5 +1,6 @@
 let sentOtp = null;
 let sessionCode = null;
+let acc_there = null;
 const platforms = document.querySelectorAll('.platform');
 const protagonist = document.getElementById('protagonist');
 let isJumping = false;
@@ -179,7 +180,12 @@ async function getSignupOTP(){
     sessionCode = result["sessionCode"]
     console.log(sentOtp)
     console.log(typeof(sentOtp))
-    createOTPPopup();
+    acc_there = result["token"]
+    if (acc_there == 1){
+    createOTPPopup();}
+    else{
+      console.log("login instead")
+    }
     return result
   }
 catch(error){
