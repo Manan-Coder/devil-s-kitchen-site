@@ -76,17 +76,27 @@ def register_user():
     passw = data.get('password')
     session_code_got = data.get('sessionCode')  
 
-    # Get the stored session code for this email
     session_code = session_codes.get(email)
 
     print(f"Received session code: {session_code_got}, Expected: {session_code}")
 
     if session_code and session_code == session_code_got:
+        conn = sqlite3.connect("database.db", check_same_thread=False)
+        cursor = conn.cursor()
         print("Valid session code")
-        return jsonify({'message':'yay you a goodie, imma make a account real quick'})
+        try:
+            cursor.execute('''INSERT INTO users(name,email,password) VALUES(?,?,?)''', (name,email,passw))
+            conn.commit()
+            print("inserted data!")
+            return jsonify({'message':'yay you a goodie, imma make a account real quick'})
+        except sqlite3.Error as e:
+            return jsonify({"error": str(e)}),500
+        finally:
+            cursor.close()
+            conn.close()
     else:
         print("Invalid session code")
         return jsonify({'error': 'dont try to cheat mf ;( i check session codes :) )'}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Changed to debug=True for development
+    app.run(debug=True)  
