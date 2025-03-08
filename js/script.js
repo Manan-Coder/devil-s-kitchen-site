@@ -1,3 +1,4 @@
+let sentOtp = null;
 const platforms = document.querySelectorAll('.platform');
 const protagonist = document.getElementById('protagonist');
 let isJumping = false;
@@ -106,8 +107,8 @@ function createOTPPopup() {
   popup.innerHTML = `
     <h3>Enter OTP</h3>
     <p>Please enter the OTP sent to your email</p>
-    <input type="text" id="otp-input" placeholder="Enter OTP" maxlength="6">
-    <div id="otp-error" class="otp-error"></div>
+    <input id="otp-input" placeholder="Enter OTP" maxlength="4" required>
+    <div id="otp-error" class="otp-error" style="color:red;"></div>
     <div class="otp-buttons">
       <button id="submit-otp">Submit</button>
       <button id="cancel-otp">Cancel</button>
@@ -122,10 +123,7 @@ function createOTPPopup() {
   document.getElementById('cancel-otp').addEventListener('click', closeOTPPopup);
   
 
-  document.getElementById('submit-otp').addEventListener('click', function() {
-
-    console.log('OTP submitted:', document.getElementById('otp-input').value);
-  });
+  document.getElementById('submit-otp').addEventListener('click',checkOTP);
 }
 
 //otp popup close
@@ -136,6 +134,27 @@ function closeOTPPopup() {
   }
 }
 
+function checkOTP(){
+  const overlay = document.getElementById('otp-overlay');
+  const otp_in = document.getElementById('otp-input').value;
+  const otp_input = Number(otp_in);
+  console.log(otp_input);
+  console.log(sentOtp);
+  if (otp_input == sentOtp)
+  {
+    document.getElementById('otp-error').style.color = 'green';
+    document.getElementById('otp-error').innerHTML = 'Success!';
+    setTimeout(() => {
+      const overlay = document.getElementById('otp-overlay');
+      if (overlay) {
+        overlay.remove();
+      }
+    }, 1000);
+  }
+  else{
+    document.getElementById('otp-error').innerHTML = 'Wrong OTP :/';
+  }
+}
 
 //api call to send the otp
 async function getSignupOTP(){
@@ -154,9 +173,9 @@ async function getSignupOTP(){
 
     const result = await response.json();
     console.log(result)
-    const otp = result["otp"]
-    console.log(otp)
-    console.log(typeof(otp))
+    sentOtp = result["otp"]
+    console.log(sentOtp)
+    console.log(typeof(sentOtp))
     createOTPPopup();
     return result
   }
