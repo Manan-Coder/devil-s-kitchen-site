@@ -92,6 +92,52 @@ platforms.forEach(platform => {
   });
 });
 
+//otp popup
+function createOTPPopup() {
+
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay';
+  overlay.id = 'otp-overlay';
+  
+  const popup = document.createElement('div');
+  popup.className = 'otp-popup';
+  
+
+  popup.innerHTML = `
+    <h3>Enter OTP</h3>
+    <p>Please enter the OTP sent to your email</p>
+    <input type="text" id="otp-input" placeholder="Enter OTP" maxlength="6">
+    <div id="otp-error" class="otp-error"></div>
+    <div class="otp-buttons">
+      <button id="submit-otp">Submit</button>
+      <button id="cancel-otp">Cancel</button>
+    </div>
+  `;
+  
+
+  overlay.appendChild(popup);
+  document.body.appendChild(overlay);
+  
+
+  document.getElementById('cancel-otp').addEventListener('click', closeOTPPopup);
+  
+
+  document.getElementById('submit-otp').addEventListener('click', function() {
+
+    console.log('OTP submitted:', document.getElementById('otp-input').value);
+  });
+}
+
+//otp popup close
+function closeOTPPopup() {
+  const overlay = document.getElementById('otp-overlay');
+  if (overlay) {
+    overlay.remove();
+  }
+}
+
+
+//api call to send the otp
 async function getSignupOTP(){
   const email = document.getElementById('email').value
   const name = document.getElementById('name').value
@@ -108,6 +154,10 @@ async function getSignupOTP(){
 
     const result = await response.json();
     console.log(result)
+    const otp = result["otp"]
+    console.log(otp)
+    console.log(typeof(otp))
+    createOTPPopup();
     return result
   }
 catch(error){
@@ -115,3 +165,5 @@ catch(error){
   return null;
 }
 }
+
+

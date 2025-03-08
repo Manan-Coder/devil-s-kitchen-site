@@ -2,6 +2,21 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
+import sqlite3
+
+conn = sqlite3.connect("database.db")
+cursor = conn.cursor()
+
+cursor.execute(
+    '''CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    password TEXT NOT NULL
+    )'''
+
+)
+conn.commit()
 load_dotenv()
 app = Flask(__name__)
 CORS(app)
@@ -16,26 +31,28 @@ def send_mail_signup_otp():
     from email.mime.text import MIMEText
     import random
 
-    otp = random.randint(1000,9999)
+    otp = random.randint(1000,9999) #random otp gen
 
     smtp_server = 'smtp.gmail.com'
     smtp_port = 587
     email_from = os.getenv('EMAIL-ADDRESS')
     email_to = email
     email_password = os.getenv('EMAIL-PASS')
-    msg = MIMEText(f'''Hey {name}! Thanks for signing up for Devil's Kitchen.
+    msg = MIMEText(f'''Hey {name}! Thanks for signing up for Devil's Kitchen. 
 Here's your OTP to verify your email - {otp}
-enjoy :D''')
+enjoy :D''') #message to send as email
     msg['Subject'] = f"Hey {name}! {otp} is your OTP for Devil's Kitchen"
     msg['From'] = email_from
     msg['To'] = email_to
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
+    with smtplib.SMTP(smtp_server, smtp_port) as server: #logging in server
         server.starttls()
         server.login(email_from, email_password)
         server.sendmail(email_from, [email_to], msg.as_string())
         return jsonify({'message': 'Email sent!','otp':otp})
 if __name__ == '__main__':
     app.run(debug=False)
+
+
 
 
 

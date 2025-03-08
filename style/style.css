@@ -250,3 +250,84 @@
 
 
 
+/* Add this CSS to your stylesheet */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.otp-popup {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 350px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.otp-popup h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.otp-popup p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.otp-popup input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  text-align: center;
+  letter-spacing: 4px;
+  box-sizing: border-box;
+}
+
+.otp-error {
+  color: red;
+  font-size: 14px;
+  min-height: 20px;
+  margin: 5px 0;
+}
+
+.otp-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.otp-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.otp-buttons button:first-child {
+  background: #3498db;
+  color: white;
+  flex-grow: 2;
+  margin-right: 10px;
+}
+
+.otp-buttons button:last-child {
+  background: #f1f1f1;
+  color: #333;
+  flex-grow: 1;
+}
