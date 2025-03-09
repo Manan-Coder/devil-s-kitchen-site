@@ -183,7 +183,10 @@ async function getSignupOTP(){
     acc_there = result["token"]
     if (acc_there == 1){
     createOTPPopup();}
-    else{
+    else if(acc_there == 0){
+      document.getElementById('alert-label-sgp').style.color = 'red'
+      document.getElementById('alert-label-sgp').innerHTML = 'You have an account already, Login instead!'
+ 
       console.log("login instead")
     }
     return result
