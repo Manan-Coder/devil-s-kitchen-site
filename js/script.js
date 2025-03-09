@@ -223,7 +223,7 @@ async function registerUser(){
 async function login(){
   const email = document.getElementById('email-login').value
   const passw = document.getElementById('passw-login').value
-
+  const alert_label = document.getElementById('alert-label')
   data = {email,passw}
   console.log(data)
   try{
@@ -235,7 +235,22 @@ async function login(){
       body : JSON.stringify(data)
     });
     const result = await response.json()
-    console.log(result)}
+    console.log(result)
+    const passStatus = result['pass-status']
+    const acc_there = result['acc-there']
+    if (passStatus == 0)
+    {alert_label.style.color = 'red';
+      alert_label.innerHTML =  "Wrong Password!";
+    }
+    else if(acc_there == 1)
+    {alert_label.style.color = 'green';
+      alert_label.innerHTML =  "Login Successful!";}
+   
+    else if (acc_there == 0)
+    {alert_label.style.color = 'red';
+      alert_label.innerHTML =  "Account not found. Signup!";
+
+    } }
     catch(error){
       console.log(error)
       return null

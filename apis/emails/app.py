@@ -119,7 +119,7 @@ def login():
     cursor.execute('SELECT password FROM users WHERE email=?',(email,))
     passwdb = cursor.fetchone()
     
-    if passwdb[0] is None:
+    if passwdb is None:
         acc_there = 0
         return jsonify({"message":"you dont have an account,make one",'acc-there':acc_there})
     if passwdb[0] == password:
