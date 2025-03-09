@@ -220,3 +220,24 @@ async function registerUser(){
 }
 
 
+async function login(){
+  const email = document.getElementById('email-login').value
+  const passw = document.getElementById('passw-login').value
+
+  data = {email,passw}
+  console.log(data)
+  try{
+    const response = await fetch('http://127.0.0.1:5000/login',{
+      method : 'POST',
+      headers:{
+        "Content-type" : "application/json"
+      },
+      body : JSON.stringify(data)
+    });
+    const result = await response.json()
+    console.log(result)}
+    catch(error){
+      console.log(error)
+      return null
+    }
+}

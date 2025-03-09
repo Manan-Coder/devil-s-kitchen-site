@@ -107,6 +107,28 @@ def register_user():
     else:
         print("Invalid session code")
         return jsonify({'error': 'dont try to cheat mf ;( i check session codes :) )'}), 400
+@app.route("/login", methods=['POST'])
+def login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('passw')
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT password FROM users WHERE email=?',(email,))
+    passwdb = cursor.fetchone()
+    
+    if passwdb[0] is None:
+        acc_there = 0
+        return jsonify({"message":"you dont have an account,make one",'acc-there':acc_there})
+    if passwdb[0] == password:
+        acc_there = 1
+        return jsonify({"message":"login successful",'acc-there':acc_there})
+    else:
+        print('passowrd from user',password)
+        print('passowrd in db', passwdb[0])
+        return jsonify({"error":"wrong password","pass-status":0}),400
 
 if __name__ == '__main__':
     app.run(debug=True)  
